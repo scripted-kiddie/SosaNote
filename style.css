@@ -1,0 +1,530 @@
+body:not(.theme-rainbow):not(.theme-futuristic):not(.theme-dainty):not(.theme-dark):not(.theme-gopher) {
+  background: #efdfb9;
+  color: #3b2e1a;
+}
+.theme-rainbow .settings-label.clickable,
+.theme-rainbow .settings-label.clickable:hover {
+  background: #fff !important;
+  color: #3b2e1a !important;
+  border: 1.5px solid #e6d8c3 !important;
+}
+.theme-rainbow #save,
+.theme-rainbow #save:hover,
+.theme-rainbow #save:focus {
+  background: #fff !important;
+  color: #3b2e1a !important;
+  border: 1.5px solid #e6d8c3 !important;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
+}
+
+/* Rainbow Theme (move to end to avoid overriding default) */
+.theme-rainbow {
+  --body-bg: linear-gradient(135deg, #ff0000 0%, #ff9900 20%, #ffee00 40%, #33ff00 60%, #0066ff 80%, #cc00ff 100%);
+  --body-fg: #3b2e1a;
+  --note-bg: #fff;
+  --note-fg: #3b2e1a;
+  --note-border: #e6d8c3;
+  --note-font-size: 15px;
+  --section-bg: #fff;
+  --section-border: #e6d8c3;
+  --section-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+  --title-fg: #7a6c4f;
+  --button-bg: #f9f8f6;
+  --button-fg: #3b2e1a;
+  --button-border: #e6d8c3;
+  --button-hover-bg: #ffe7a0;
+  --button-hover-fg: #3b2e1a;
+  --delete-btn-fg: #c00;
+  --delete-btn-hover-fg: #f33;
+  --delete-btn-hover-bg: #f7e3b3;
+}
+
+body.theme-futuristic #texturePack {
+  background: #10182a;
+  color: #aeeaff;
+  border: 1.5px solid #3be8ff;
+  box-shadow: 0 0 8px #3be8ff55;
+}
+body.theme-futuristic #texturePack option {
+  background: #10182a;
+  color: #aeeaff;
+}
+/* Futuristic Blue Theme */
+.theme-futuristic {
+  --body-bg: linear-gradient(135deg, #10182a 0%, #19304a 100%);
+  --body-fg: #aeeaff;
+  --note-bg: rgba(20, 30, 50, 0.95);
+  --note-fg: #aeeaff;
+  --note-border: #0c5963;
+  --section-bg: linear-gradient(135deg, #10182a 0%, #19304a 100%);
+  --section-border: #3be8ff;
+  --section-shadow: 0 4px 24px 0 #3be8ff44, 0 1.5px 8px 0 #00eaff22;
+  --title-fg: #3be8ff;
+  --button-bg: linear-gradient(90deg, #19304a 0%, #2e5c8a 100%);
+  --button-fg: #fff;
+  --button-border: #3be8ff;
+  --button-hover-bg: linear-gradient(90deg, #2e5c8a 0%, #19304a 100%);
+  --button-hover-fg: #fff;
+  --delete-btn-fg: #ff4b6e;
+  --delete-btn-hover-fg: #fff;
+  --delete-btn-hover-bg: #3be8ff33;
+  --persistent-fg: #3be8ff;
+  /* Glowing effect for sort and title */
+}
+
+body.theme-futuristic {
+  background: linear-gradient(135deg, #0a0f1c 0%, #1a233a 100%) !important;
+  color: #aeeaff;
+}
+
+.theme-futuristic .title, .theme-futuristic .sort-label.active {
+  text-shadow: 0 0 8px #3be8ff, 0 0 2px #aeeaff;
+}
+
+.theme-futuristic .sort-label {
+  text-shadow: 0 0 4px #3be8ff99;
+}
+
+.theme-futuristic .open-notes-section {
+  box-shadow: 0 0 24px 0 #3be8ff44, 0 1.5px 8px 0 #00eaff22;
+  border: 1.5px solid #3be8ff;
+  background: linear-gradient(135deg, #10182a 0%, #19304a 100%);
+}
+
+.theme-futuristic #note {
+  background: rgba(20, 30, 50, 0.95);
+  color: #aeeaff;
+  border: 1.5px solid #3be8ff;
+  box-shadow: 0 0 12px 0 #3be8ff33;
+}
+
+.theme-futuristic .switch-label, .theme-futuristic .switch-text {
+  color: #3be8ff;
+  text-shadow: 0 0 4px #3be8ff99;
+}
+
+.theme-futuristic .settings-label.clickable {
+  background: linear-gradient(90deg, #19304a 0%, #2e5c8a 100%);
+  color: #fff;
+  border: 1.5px solid #3be8ff;
+  text-shadow: 0 0 4px #3be8ff99;
+}
+
+.theme-futuristic .settings-label.clickable:hover {
+  background: linear-gradient(90deg, #2e5c8a 0%, #19304a 100%);
+  color: #fff;
+}
+
+.theme-futuristic .delete-note-btn {
+  color: #ff4b6e;
+}
+.theme-futuristic .delete-note-btn:hover {
+  color: #fff;
+  background: #3be8ff33;
+}
+/* Style for 'No open notes yet' message */
+.open-notes-row .open-notes-col.open-notes-col-url {
+  color: #b0b0b0;
+}
+/* Reserve space for the status message so it doesn't shift layout */
+#status {
+  display: block;
+  min-height: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  color: green;
+  position: relative;
+  pointer-events: none;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+#openNotesList li {
+  border-bottom: 1px solid #eee;
+}
+
+/* Dark theme: less bright borders for open notes list items */
+.theme-dark #openNotesList li {
+  border-bottom: 1px solid #222;
+}
+:root {
+  --body-bg: #efdfb9;
+  --body-fg: #3b2e1a;
+  --note-bg: #fff;
+  --note-fg: #3b2e1a;
+  --note-border: #e6d8c3;
+  --note-font-size: 15px;
+  --section-bg: #fff;
+  --section-border: #e6d8c3;
+  --section-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+  --title-fg: #7a6c4f;
+  --button-bg: #f9f8f6;
+  --button-fg: #3b2e1a;
+  --button-border: #e6d8c3;
+  --button-hover-bg: #ffe7a0;
+  --button-hover-fg: #3b2e1a;
+  --delete-btn-fg: #c00;
+  --delete-btn-hover-fg: #f33;
+  --delete-btn-hover-bg: #f7e3b3;
+}
+.theme-dainty {
+  --body-bg: #fbbdd6;
+  --body-fg: #a14a76;
+  --note-bg: #fff;
+  --note-fg: #a14a76;
+  --note-border: #f7c4e1;
+  --section-bg: #fff;
+  --section-border: #f7c4e1;
+  --section-shadow: 0 2px 8px 0 #f7c4e155;
+  --title-fg: #a14a76;
+  --button-bg: #fceef6;
+  --button-fg: #a14a76;
+  --button-border: #f7c4e1;
+  --button-hover-bg: #ffe0f0;
+  --button-hover-fg: #a14a76;
+  --delete-btn-fg: #e75480;
+  --delete-btn-hover-fg: #fff;
+  --delete-btn-hover-bg: #e7548033;
+}
+.theme-dark {
+  --body-bg: #232323;
+  --body-fg: #f7f7f7;
+  --note-bg: #181818;
+  --note-fg: #f7f7f7;
+  --note-border: #a1a1a1;
+  --section-bg: #181818;
+  --section-border: #444;
+  --section-shadow: 0 2px 8px 0 #000a;
+  --title-fg: #f7f7f7;
+  --button-bg: #444;
+  --button-fg: #f7f7f7;
+  --button-border: #666;
+  --button-hover-bg: #333;
+  --button-hover-fg: #fff;
+  --delete-btn-fg: #ff4b6e;
+  --delete-btn-hover-fg: #fff;
+  --delete-btn-hover-bg: #ff4b6e33;
+}
+
+.theme-gopher {
+  --body-bg: #7a0019;
+  --body-fg: #7a0019;
+  --persistent-fg: #ffcc33;
+  --note-bg: #fff;
+  --note-fg: #7a0019;
+  --note-border: #ffcc33;
+  --section-bg: #fff;
+  --section-border: #ffcc33;
+  --section-shadow: 0 2px 8px 0 #ffcc3355;
+  --title-fg: #7a0019;
+  --button-bg: #ffcc33;
+  --button-fg: #7a0019;
+  --button-border: #ffcc33;
+  --button-hover-bg: #ffe699;
+  --button-hover-fg: #7a0019;
+  --delete-btn-fg: #b10021;
+  --delete-btn-hover-fg: #fff;
+  --delete-btn-hover-bg: #b1002133;
+}
+
+/* Cleaned up: Only one definition per selector below */
+#openNotesList li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 1px 0;
+  border-bottom: 1px solid #eee;
+  gap: 0;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 22px;
+  color: var(--title-fg);
+}
+
+/* Layout height adjustments */
+body {
+  width: 400px;
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  background: var(--body-bg);
+  color: var(--body-fg);
+  padding: 6px;
+}
+
+/* Larger textarea */
+#note {
+  height: 150px;
+  resize: vertical;
+  margin-bottom: 12px;
+  background: var(--note-bg);
+  color: var(--note-fg);
+  border: 1.5px solid var(--note-border);
+  border-radius: 6px;
+  font-size: 13px;
+  padding: 8px;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+/* Open Notes Section */
+.open-notes-section {
+  margin-top: 2px;
+  margin-bottom: 6px;
+  border-top: 1.5px solid var(--section-border);
+  padding-top: 6px;
+  background: var(--section-bg);
+  border-radius: 6px;
+  height: 250px;
+  max-height: 250px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--section-shadow, none);
+}
+
+.open-notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+#sortNotes {
+  font-size: 12px;
+  padding: 2px;
+}
+
+#openNotesList {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  height: 100%;
+  max-height: 100%;
+}
+
+.open-notes-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+.open-notes-col {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 4px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+.open-notes-col-url {
+  flex: 2 1 0;
+  min-width: 80px;
+}
+.open-notes-col-url a {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+.open-notes-col-date {
+  flex: 1.5 1 0;
+  min-width: 70px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+}
+.open-notes-col-action {
+  flex: 0 0 32px;
+  min-width: 32px;
+  justify-content: flex-end;
+}
+
+/* Removed duplicate #openNotesList li blocks above */
+#openNotesList li:last-child {
+  border-bottom: none;
+}
+
+.delete-note-btn {
+  background: none;
+  border: none;
+  color: var(--delete-btn-fg);
+  font-size: 15px;
+  cursor: pointer;
+  margin-left: 8px;
+  padding: 0 2px;
+  transition: color 0.2s, background 0.2s;
+}
+.delete-note-btn:hover {
+  color: var(--delete-btn-hover-fg);
+  background: var(--delete-btn-hover-bg);
+}
+
+.logo {
+  margin-right: 0;
+}
+
+/* Modern toggle switch */
+.mode-switch {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 0;
+}
+.switch-label {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px;
+  color: var(--persistent-fg, var(--body-fg));
+  cursor: pointer;
+  margin-top: 0; /* Remove margin-top for better alignment */
+}
+.switch-input {
+  display: none;
+}
+.switch-slider {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 20px;
+  transition: background 0.2s;
+  margin-right: 6px;
+  box-sizing: border-box;
+  display: inline-block;
+}
+.switch-slider:before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+.switch-input:checked + .switch-slider {
+  background: #73c5f7;
+}
+.switch-input:checked + .switch-slider:before {
+  transform: translateX(16px);
+}
+.switch-text {
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+  height: 20px;
+}
+
+/* Sort labels for open notes section */
+.open-notes-sort-labels {
+  display: flex;
+  gap: 24px;
+  font-size: 12px;
+  margin-bottom: 1px;
+  margin-left: 1px;
+}
+.sort-label {
+  cursor: pointer;
+  color: var(--body-fg);
+  opacity: 0.7;
+  user-select: none;
+  transition: color 0.2s, opacity 0.2s;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.sort-label.active {
+  color: var(--title-fg);
+  font-weight: bold;
+  opacity: 1;
+  background: var(--button-bg);
+}
+.sort-label:hover {
+  opacity: 1;
+  background: var(--button-hover-bg);
+}
+.settings-label.clickable {
+  cursor: pointer;
+  color: var(--button-fg);
+  background: var(--button-bg);
+  border-radius: 5px;
+  padding: 4px 10px;
+  transition: background 0.2s, color 0.2s;
+  user-select: none;
+  display: inline-block;
+}
+.settings-label.clickable:hover {
+  background: var(--button-hover-bg);
+  color: var(--button-hover-fg);
+}
+#texturePack {
+  margin-left: 8px;
+  min-width: 120px;
+  border-radius: 5px;
+  border: 1.5px solid var(--button-border);
+  background: var(--button-bg);
+  color: var(--button-fg);
+  font-size: 12px;
+  padding: 4px 8px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
+  z-index: 10;
+  position: absolute;
+}
+.settings-section {
+  position: relative;
+  margin-bottom: 0;
+  margin-top: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.top-controls-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 8px;
+}
+
+#save {
+  background: var(--button-bg);
+  color: var(--button-fg);
+  border: none;
+  border-radius: 999px;
+  padding: 5px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.12s;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  outline: none;
+}
+#save:hover, #save:focus {
+  background: var(--button-hover-bg);
+  color: var(--button-hover-fg);
+  box-shadow: 0 4px 16px 0 rgba(0,0,0,0.10);
+  transform: translateY(-1px) scale(1.03);
+}
+.theme-dark #openNotesList li a {
+  color: #7de2ff;
+}
+
+.theme-futuristic #openNotesList li a {
+  color: #7de2ff;
+}

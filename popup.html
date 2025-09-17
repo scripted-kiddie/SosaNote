@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <textarea id="note" placeholder="Write your note for this site..."></textarea>
+
+  <button id="save">Save Note</button>
+  <p id="status"></p>
+
+  <div class="open-notes-section">
+    <div class="open-notes-header open-notes-row">
+      <span class="open-notes-sort-labels open-notes-col open-notes-col-url">
+        <span id="sortByUrl" class="sort-label clickable">url</span>
+      </span>
+      <span class="open-notes-sort-labels open-notes-col open-notes-col-date">
+        <span id="sortByDate" class="sort-label clickable">date added</span>
+      </span>
+      <span class="open-notes-col open-notes-col-action"></span>
+    </div>
+    <ul id="openNotesList"></ul>
+  </div>
+
+  <div class="top-controls-row">
+    <div class="mode-switch">
+      <label class="switch-label">
+        <input type="checkbox" id="modeToggle" class="switch-input">
+        <span class="switch-slider"></span>
+        <span class="switch-text">Persistent Mode</span>
+      </label>
+    </div>
+    <div class="settings-section">
+      <span id="themeLabel" class="settings-label clickable">Change theme</span>
+      <select id="texturePack" style="display:none;">
+        <option value="default">Default (Notepad)</option>
+        <option value="dark">Dark</option>
+        <option value="gopher">Gopher</option>
+        <option value="dainty">Dainty</option>
+        <option value="futuristic">Futuristic</option>
+        <option value="rainbow">Rainbow</option>
+      </select>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
