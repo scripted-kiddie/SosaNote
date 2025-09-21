@@ -7,13 +7,22 @@
 
   <textarea id="note" placeholder="Write your note for this site..."></textarea>
 
-  <button id="save">Save Note</button>
+  <div class="save-buttons-row">
+    <div class="tooltip-container">
+  <button id="save" class="half-width" title="ctrl+s">Save Note (Domain)</button>
+      <span class="tooltip-text">Ctrl+S</span>
+    </div>
+    <div class="tooltip-container">
+  <button id="save-url" class="half-width" title="ctrl+shift+s">Save Note (URL)</button>
+      <span class="tooltip-text">Ctrl+Shift+S</span>
+    </div>
+  </div>
   <p id="status"></p>
 
   <div class="open-notes-section">
     <div class="open-notes-header open-notes-row">
       <span class="open-notes-sort-labels open-notes-col open-notes-col-url">
-        <span id="sortByUrl" class="sort-label clickable">url</span>
+        <span id="sortByUrl" class="sort-label clickable">domain/url</span>
       </span>
       <span class="open-notes-sort-labels open-notes-col open-notes-col-date">
         <span id="sortByDate" class="sort-label clickable">date added</span>
@@ -36,7 +45,7 @@
       <select id="texturePack" style="display:none;">
         <option value="default">Default (Notepad)</option>
         <option value="dark">Dark</option>
-        <option value="gopher">Gopher</option>
+        <option value="gopher">Gophers</option>
         <option value="dainty">Dainty</option>
         <option value="futuristic">Futuristic</option>
         <option value="rainbow">Rainbow</option>

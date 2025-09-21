@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const noteArea = document.getElementById("note");
   const saveBtn = document.getElementById("save");
+  const saveUrlBtn = document.getElementById("save-url");
   const status = document.getElementById("status");
   const modeToggle = document.getElementById("modeToggle");
   const openNotesList = document.getElementById("openNotesList");
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Save note
+  // Save note (domain only)
   saveBtn.addEventListener("click", () => {
     chrome.storage.local.get([MODE_KEY, META_KEY], (result) => {
       const mode = result[MODE_KEY] || "website";
@@ -51,6 +52,32 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  // Save note (full URL)
+  if (saveUrlBtn) {
+    saveUrlBtn.addEventListener("click", () => {
+      chrome.storage.local.get([MODE_KEY, META_KEY], (result) => {
+        const mode = result[MODE_KEY] || "website";
+        const meta = result[META_KEY] || {};
+
+        if (mode === "persistent") {
+          chrome.storage.local.set({ [PERSISTENT_KEY]: noteArea.value }, showSaved);
+        } else {
+          chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            const url = new URL(tabs[0].url);
+            const fullUrl = url.href;
+            chrome.storage.local.set({ [fullUrl]: noteArea.value }, () => {
+              if (!meta[fullUrl]) meta[fullUrl] = Date.now();
+              chrome.storage.local.set({ [META_KEY]: meta }, () => {
+                showSaved();
+                loadOpenNotes();
+              });
+            });
+          });
+        }
+      });
+    });
+  }
 
   // Load current site note
   function loadNote(mode) {
@@ -77,8 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- SORTING LOGIC ---
-  let currentSort = "url"; // default sort
-
+  let currentSort = "url";
   function setSort(sort) {
     currentSort = sort;
     if (sortByUrl && sortByDate) {
@@ -87,24 +113,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     loadOpenNotes();
   }
-
   if (sortByUrl && sortByDate) {
     sortByUrl.addEventListener("click", () => setSort("url"));
     sortByDate.addEventListener("click", () => setSort("date"));
-    // setSort("url"); // Removed to prevent double rendering
   }
 
   // Load open notes
   function loadOpenNotes() {
     openNotesList.innerHTML = "";
     chrome.storage.local.get(null, (items) => {
-      const meta = items[META_KEY] || {};
 
-      // Filter for unique, non-empty domains only
+
+      const meta = items[META_KEY] || {};
       let seen = new Set();
       let domains = Object.keys(items).filter(k => {
         if (k === PERSISTENT_KEY || k === MODE_KEY || k === META_KEY || k === THEME_KEY) return false;
-        if (!items[k] || !items[k].trim()) return false;
+        if (typeof items[k] !== 'string' || !items[k].trim()) return false;
         if (seen.has(k)) return false;
         seen.add(k);
         return true;
@@ -116,7 +140,10 @@ document.addEventListener("DOMContentLoaded", () => {
         domains.sort((a,b) => (meta[b] || 0) - (meta[a] || 0));
       }
 
-      domains.forEach(domain => {
+      // Load display names from storage
+      const displayNames = items.noteDisplayNames || {};
+
+      domains.forEach(domainOrUrl => {
         const li = document.createElement("li");
         li.className = "open-notes-row";
 
@@ -124,8 +151,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const urlCol = document.createElement("span");
         urlCol.className = "open-notes-col open-notes-col-url";
         const link = document.createElement("a");
-        link.href = "https://" + domain;
-        link.textContent = domain;
+        let isFullUrl = domainOrUrl.startsWith("http://") || domainOrUrl.startsWith("https://");
+        link.href = isFullUrl ? domainOrUrl : ("https://" + domainOrUrl);
+        // Use display name if set
+        if (displayNames[domainOrUrl]) {
+          link.textContent = displayNames[domainOrUrl];
+        } else if (isFullUrl) {
+          link.textContent = domainOrUrl.replace(/^https?:\/\//, "");
+        } else {
+          link.textContent = domainOrUrl;
+        }
         link.target = "_blank";
         urlCol.appendChild(link);
 
@@ -133,29 +168,101 @@ document.addEventListener("DOMContentLoaded", () => {
         const dateCol = document.createElement("span");
         dateCol.className = "open-notes-col open-notes-col-date";
         let dateStr = "";
-        if (meta[domain]) {
-          const date = new Date(meta[domain]);
+        if (meta[domainOrUrl]) {
+          const date = new Date(meta[domainOrUrl]);
           dateStr = date.toLocaleDateString() + " " + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         }
         dateCol.textContent = dateStr;
         dateCol.style.fontSize = "11px";
         dateCol.style.color = "#888";
 
-        // Action column (delete)
+        // Action column (label + delete)
         const actionCol = document.createElement("span");
         actionCol.className = "open-notes-col open-notes-col-action";
+
+
+    // Label button
+  const labelBtn = document.createElement("button");
+  labelBtn.className = "label-note-btn";
+  labelBtn.style.marginRight = "4px";
+  labelBtn.setAttribute("aria-label", "Label");
+  labelBtn.innerHTML = displayNames[domainOrUrl] ? "&#8634;" : "&#128221;"; // undo or label icon
+  labelBtn.title = displayNames[domainOrUrl] ? "undo label" : "add label";
+
+        labelBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          if (displayNames[domainOrUrl]) {
+            // Undo: remove label
+            chrome.storage.local.get(["noteDisplayNames"], (result) => {
+              const names = result.noteDisplayNames || {};
+              delete names[domainOrUrl];
+              chrome.storage.local.set({ noteDisplayNames: names }, loadOpenNotes);
+            });
+          } else {
+            // Inline text entry for label
+            if (urlCol.querySelector('.label-inline-input')) return; // Prevent multiple
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'label-inline-input';
+            input.placeholder = 'enter label...';
+            input.style.fontSize = '13px';
+            input.style.padding = '2px 6px';
+            input.style.marginLeft = '6px';
+            input.style.border = '1px solid #bbb';
+            input.style.borderRadius = '4px';
+            input.style.width = '90px';
+            input.style.outline = 'none';
+            urlCol.appendChild(input);
+            input.focus();
+            // Save on Enter, cancel on Escape, blur saves if not empty
+            function saveLabel() {
+              const newLabel = input.value;
+              if (newLabel && newLabel.trim()) {
+                chrome.storage.local.get(["noteDisplayNames"], (result) => {
+                  const names = result.noteDisplayNames || {};
+                  names[domainOrUrl] = newLabel.trim();
+                  chrome.storage.local.set({ noteDisplayNames: names }, loadOpenNotes);
+                });
+              } else {
+                urlCol.removeChild(input);
+              }
+            }
+            input.addEventListener('keydown', function(ev) {
+              if (ev.key === 'Enter') saveLabel();
+              if (ev.key === 'Escape') urlCol.removeChild(input);
+            });
+            input.addEventListener('blur', function() {
+              if (input.value && input.value.trim()) saveLabel();
+              else if (urlCol.contains(input)) urlCol.removeChild(input);
+            });
+          }
+        });
+        actionCol.appendChild(labelBtn);
+
+        // Delete button
         const deleteBtn = document.createElement("button");
         deleteBtn.className = "delete-note-btn";
         deleteBtn.title = "Delete note";
-        deleteBtn.innerHTML = "&#128465;"; // trash can icon
+        deleteBtn.innerHTML = "&#128465;";
+
+        // Tooltip for delete
+        const deleteTooltip = document.createElement("span");
+        deleteTooltip.className = "tooltip-text";
+        deleteTooltip.textContent = "delete";
+        deleteBtn.appendChild(deleteTooltip);
+        deleteBtn.addEventListener("mouseenter", () => { deleteTooltip.style.visibility = "visible"; deleteTooltip.style.opacity = 1; });
+        deleteBtn.addEventListener("mouseleave", () => { deleteTooltip.style.visibility = "hidden"; deleteTooltip.style.opacity = 0; });
+        deleteBtn.addEventListener("focus", () => { deleteTooltip.style.visibility = "visible"; deleteTooltip.style.opacity = 1; });
+        deleteBtn.addEventListener("blur", () => { deleteTooltip.style.visibility = "hidden"; deleteTooltip.style.opacity = 0; });
+
         deleteBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           e.preventDefault();
-          chrome.storage.local.remove([domain], () => {
-            // Remove meta entry
+          chrome.storage.local.remove([domainOrUrl], () => {
             chrome.storage.local.get([META_KEY], (result) => {
               const metaObj = result[META_KEY] || {};
-              delete metaObj[domain];
+              delete metaObj[domainOrUrl];
               chrome.storage.local.set({ [META_KEY]: metaObj }, loadOpenNotes);
             });
           });
@@ -169,16 +276,22 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (!domains.length) {
-        openNotesList.innerHTML = "<li class='open-notes-row'><span class='open-notes-col open-notes-col-url'>No open notes yet.</span><span class='open-notes-col open-notes-col-date'></span><span class='open-notes-col open-notes-col-action'></span></li>";
+        openNotesList.innerHTML += "<li class='open-notes-row'><span class='open-notes-col open-notes-col-url'>No open notes yet.</span><span class='open-notes-col open-notes-col-date'></span><span class='open-notes-col open-notes-col-action'></span></li>";
       }
     });
   }
 
-  // Keyboard shortcut: Ctrl+S to save
+  // Keyboard shortcuts
   document.addEventListener("keydown", function(e) {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+    // Ctrl+S: Save (domain)
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === "s") {
       e.preventDefault();
       saveBtn.click();
+    }
+    // Ctrl+Shift+S: Save with URL
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "s") {
+      e.preventDefault();
+      if (saveUrlBtn) saveUrlBtn.click();
     }
   });
 
@@ -186,7 +299,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeSelect = document.getElementById("texturePack");
   const themeLabel = document.getElementById("themeLabel");
   const body = document.body;
-
   if (themeLabel && themeSelect) {
     themeLabel.addEventListener("click", () => {
       themeSelect.style.display = "inline-block";
@@ -199,15 +311,11 @@ document.addEventListener("DOMContentLoaded", () => {
       themeSelect.style.display = "none";
     });
   }
-
-  // Load saved theme and apply
   chrome.storage.local.get([THEME_KEY], (result) => {
     const theme = result[THEME_KEY] || "default";
     applyTheme(theme);
     if (themeSelect) themeSelect.value = theme;
   });
-
-  // Listen for theme changes
   if (themeSelect) {
     themeSelect.addEventListener("change", () => {
       const theme = themeSelect.value;
@@ -215,7 +323,6 @@ document.addEventListener("DOMContentLoaded", () => {
       chrome.storage.local.set({ [THEME_KEY]: theme });
     });
   }
-
   function applyTheme(theme) {
     body.classList.remove(
       "theme-futuristic",

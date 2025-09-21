@@ -1,0 +1,9 @@
+add url specific note save
+new column (domain, then url)
+new button (save with domain = ctrl shift s)
+
+
+
+
+
+ensure persistence through update     

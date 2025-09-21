@@ -10,10 +10,13 @@ body:not(.theme-rainbow):not(.theme-futuristic):not(.theme-dainty):not(.theme-da
 }
 .theme-rainbow #save,
 .theme-rainbow #save:hover,
-.theme-rainbow #save:focus {
+.theme-rainbow #save:focus,
+.theme-rainbow #save-url,
+.theme-rainbow #save-url:hover,
+.theme-rainbow #save-url:focus {
   background: #fff !important;
   color: #3b2e1a !important;
-  border: 1.5px solid #e6d8c3 !important;
+  border: 1.5px solid #ffffff !important;
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
 }
 
@@ -499,7 +502,23 @@ body {
   margin-top: 8px;
 }
 
-#save {
+/* Save buttons row */
+.save-buttons-row {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  width: 50%;
+}
+.half-width {
+  width: 100%;
+  height: 36px;
   background: var(--button-bg);
   color: var(--button-fg);
   border: none;
@@ -511,15 +530,63 @@ body {
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
   cursor: pointer;
   transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.12s;
-  margin-bottom: 2px;
-  margin-top: 2px;
   outline: none;
+  display: inline-block;
 }
-#save:hover, #save:focus {
+.half-width:hover, .half-width:focus {
   background: var(--button-hover-bg);
   color: var(--button-hover-fg);
   box-shadow: 0 4px 16px 0 rgba(0,0,0,0.10);
   transform: translateY(-1px) scale(1.03);
+}
+.tooltip-text {
+  visibility: hidden;
+  width: max-content;
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 4px 10px;
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 110%;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-size: 12px;
+  pointer-events: none;
+.tooltip-container:hover .tooltip-text,
+.tooltip-container:focus-within .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+.label-note-btn {
+  position: relative;
+}
+.label-note-btn .tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  width: 70px;
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 2px 6px;
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 120%;
+  font-size: 11px;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.label-note-btn:hover .tooltip-text,
+.label-note-btn:focus .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
 }
 .theme-dark #openNotesList li a {
   color: #7de2ff;
@@ -527,4 +594,18 @@ body {
 
 .theme-futuristic #openNotesList li a {
   color: #7de2ff;
+}
+
+.label-note-btn {
+  background: none;
+  border: none;
+  color: #7a6c4f;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0 2px;
+  transition: color 0.2s, background 0.2s;
+}
+.label-note-btn:hover {
+  color: #3b2e1a;
+  background: #ffe7a0;
 }
